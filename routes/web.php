@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\PostController;
 use App\Http\Controllers\PrimerControlador;
 use App\Http\Controllers\SegundoControlador;
@@ -9,7 +10,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('post', PostController::class);
+Route::group(['prefix' => 'dashboard'], function () { // se puede cambiar el prefix, para luego cambiar las rutas
+    Route::resource('post', PostController::class);
+    Route::resource('category', CategoryController::class);
+    // Route::resources([       //se pueden usar ambas maneras, ya es a decision de cada uno
+    //     'post'=> PostController::class,
+    //     'category'=> CategoryController::class,
+    // ]);
+});
+
 
 
 
