@@ -1,21 +1,23 @@
 @extends('dashboard.master')
 
 @section('content')
-    <a href="{{route('category.create')}}" target="_blank">Create</a>
+    <a  class="btn btn-primary my-3" href="{{route('category.create')}}" target="_blank">Create</a>
    @include('dashboard/fragment/_errors-form')
-    <table>
+    <table class="table">
         <thead>
             <tr>
-                <td>
+                <th>
                     ID
-                </td>
-                <td>
+                </th>
+                <th>
                     Title
-                </td>
-                <td>
+                </th>
+                <th>
                     Slug
-                </td>
-                
+                </th>
+                <th>
+                    Options
+                </th>
             </tr>
             
         </thead>
@@ -34,12 +36,12 @@
                     </td>
                     
                     <td>
-                        <a href="{{route('category.edit',$c->id)}}">Modificar</a>
-                        <a href="{{route('category.show',$c->id)}}">Mostrar</a>
+                        <a class="btn btn-success mt-2" href="{{route('category.edit',$c->id)}}">Modificar</a>
+                        <a class="btn btn-success mt-2" href="{{route('category.show',$c->id)}}">Mostrar</a>
                         <form action="{{route('category.destroy',$c->id)}}" method="post">
                             @method('DELETE')    
                             @csrf
-                            <button type="submit">Borrar</button>
+                            <button class="btn btn-danger" type="submit">Borrar</button>
                         </form>
                     </td>
                     
@@ -50,6 +52,8 @@
                 
         </tbody>
     </table>
-  
+    <div class="mt-2">
+
+    </div>
     {{$category ->links()}}
 @endsection

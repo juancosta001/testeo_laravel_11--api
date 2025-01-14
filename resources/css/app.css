@@ -1,3 +1,61 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+h1{
+    @apply font-bold 
+}
+
+.table{
+    @apply table-auto w-full
+}
+label{
+    @apply mt-2 block 
+}
+.table th{
+    @apply px-6 py-2 bg-gray-50 font-medium text-gray-500 uppercase border leading-4 tracking-widest
+}
+.table tr{
+    @apply border
+}
+.table td{
+    @apply px-6 py-4 whitespace-normal font-medium  bg-white
+}
+
+.form-control{
+    @apply block rounded-sm shadow-sm bg-white w-full
+}
+
+.btn{
+    @apply border rounded px-3 py-2 text-white font-bold inline-block transition-all
+}
+
+.btn-danger{
+    @apply bg-red-600 hover:bg-red-900 border-red-600
+}
+
+.btn-success{
+    @apply bg-green-600 hover:bg-green-900 border-green-600
+}
+.btn-primary{
+    @apply bg-blue-600 hover:bg-blue-900 border-blue-600
+}
+.btn-warning{
+    @apply bg-yellow-600 hover:bg-yellow-900 border-yellow-600
+}
+
+.card {
+    @apply p-6 rounded shadow-sm
+}
+.card-white{
+    @apply bg-white
+}
+.card-green{
+    @apply bg-green-300
+}
+.card-blue{
+    @apply bg-blue-200
+}
+.card-success{
+    @apply bg-green-800
+}

@@ -1,68 +1,24 @@
 <?php
-
-use App\Http\Controllers\Dashboard\CategoryController;
-use App\Http\Controllers\Dashboard\PostController;
-use App\Http\Controllers\PrimerControlador;
-use App\Http\Controllers\SegundoControlador;
+use App\Http\Middleware\UserAccessDashboardMiddleware;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::group(['prefix' => 'dashboard'], function () { // se puede cambiar el prefix, para luego cambiar las rutas
-    Route::resource('post', PostController::class);
-    Route::resource('category', CategoryController::class);
-    // Route::resources([       //se pueden usar ambas maneras, ya es a decision de cada uno
-    //     'post'=> PostController::class,
-    //     'category'=> CategoryController::class,
-    // ]);
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-
-
-
-// Route::get('test', [PrimerControlador::class,'index']);
-// Route::get('otro/{post}/{item2?}', [PrimerControlador::class,'otro']); // obliga a que haya si o si un parametro en la funcion otro
-// // el ? sirve para que sea opcional que este cargado
-
-// Route::resource('post', PrimerControlador::class);
-
-
-// Route::resource('category', PrimerControlador::class);
-
-
-
-
-// Route::get('/crud', function () { 
-//     return view('crud/index');
-// });
-
-//  Route::get( 'pruebas', function () {    
-//      return view('pruebas');
-//   });
-// Route::get('/ruta1', function () { 
-//       // return redirect('/ruta2',303);
-//       // return redirect()->route('ruta2');
-
-//       return to_route('ruta2');
-//     /*  $data=['name' => 'ruta1jara'];
-//     return view('crud/ruta1',data:$data); */
-//   })->name('ruta1');;
-//   Route::get('/ruta2', function () { 
-//     return view('crud/ruta2');
-//   })->name('ruta2');
-
-// Route::get('/contact', function () {  
-//     $age=33;
-//     $data = ['name' => 'marcos', 'age' => $age];
-//     return view('contact', $data);
-//   }
-// )->name('crud');
-// Route::get('/contact2', function () {  
-//   return view('contact2');
-// }
-// )->name('crud');
-
-
+Route::group(['prefix'=> 'dashboard', 'middleware' => ['auth',  UserAccessDashboardMiddleware::class]], function () {
+    Route::resources([
+        'post'=> App\Http\Controllers\Dashboard\PostController::class,
+        'category'=> App\Http\Controllers\Dashboard\CategoryController::class,
+    ]);
+    Route::get('', function () {
+        return view('dashboard');
+    })->middleware(['auth'])->name('dashboard');
+});
+require __DIR__.'/auth.php';

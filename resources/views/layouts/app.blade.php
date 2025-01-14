@@ -29,25 +29,7 @@
 
             <!-- Page Content -->
             <main>
-            
-
-                <main>
-                    <div class="container mx-auto px-4">
-                        
-                        @if (session('status'))
-                            <div class="card card-success my-3">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-                
-                        <div class="card card-white mt-8">
-                            <h1 class="text-xl">Dashboard</h1>
-                            @yield('content')
-                        </div>
-                    </div>
-                </main>
-                
-            
+                {{ $slot }}
             </main>
         </div>
     </body>

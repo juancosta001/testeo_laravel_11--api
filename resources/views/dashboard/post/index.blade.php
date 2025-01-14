@@ -1,26 +1,26 @@
 @extends('dashboard.master')
 
 @section('content')
-    <a href="{{route('post.create')}}" target="_blank">Create</a>
+    <a class="btn btn-primary my-3" href="{{route('post.create')}}" target="_blank">Create</a>
    @include('dashboard/fragment/_errors-form')
-    <table>
+    <table class="table">
         <thead>
             <tr>
-                <td>
+                <th>
                     ID
-                </td>
-                <td>
+                </th>
+                <th>
                     Title
-                </td>
-                <td>
+                </th>
+                <th>
                     Posted
-                </td>
-                <td>
+                </th>
+                <th>
                     Category
-                </td>
-                <td>
+                </th>
+                <th>
                     Options
-                </td>
+                </th>
             </tr>
             
         </thead>
@@ -41,12 +41,12 @@
                         {{$p ->category->title}}
                     </td>
                     <td>
-                        <a href="{{route('post.edit',$p->id)}}">Modificar</a>
-                        <a href="{{route('post.show',$p->id)}}">Mostrar</a>
+                        <a class="btn btn-success my-2" href="{{route('post.edit',$p->id)}}">Modificar</a>
+                        <a  class="btn btn-success my-2" href="{{route('post.show',$p->id)}}">Mostrar</a>
                         <form action="{{route('post.destroy',$p->id)}}" method="post">
                             @method('DELETE')    
                             @csrf
-                            <button type="submit">Borrar</button>
+                            <button class="btn btn-danger" type="submit">Borrar</button>
                         </form>
                     </td>
                     
@@ -57,6 +57,9 @@
                 
         </tbody>
     </table>
+    <div class="mt-2">
+
+    </div>
     {{$posts ->links()}}
   
     
