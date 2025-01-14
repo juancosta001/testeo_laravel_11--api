@@ -38,40 +38,29 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request)
         {   
             Category::create($request->validated()); // Validación
-            return to_route('category.index'); // Redirige al índice de categorías
+            return to_route('category.index')->with('status', 'Categoria Creada'); // Redirige al índice de categorías
         }
 
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Category $category)
     {
     return view ('dashboard.category.show',['category' => $category]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Category $category)
     {
         return view('dashboard.category.edit', compact('category'));
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(CategoryRequest $request, Category $category)
     {
         $category->update($request->validated());
-        return to_route('category.index');
+        return to_route('category.index')->with('status', 'Categoria Actualizada');
     }
 
    
     public function destroy(Category $category)
     {
         $category->delete();
-        return to_route('category.index');
+        return to_route('category.index')->with('status','Categoria Eliminada Satisfactoriamente');
     }
 }

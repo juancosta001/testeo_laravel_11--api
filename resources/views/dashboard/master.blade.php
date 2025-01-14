@@ -7,6 +7,13 @@
     <title>Dashboard</title>
 </head>
 <body>
+    @session('status')
+        {{$value}}
+    @endsession
+
+    @session('key')
+    <h1>{{$value}}</h1>
+    @endsession
     <header>
         
     </header>

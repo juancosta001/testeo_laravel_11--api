@@ -16,6 +16,10 @@ class PostController extends Controller
      */
     public function index()
     {    
+        // session()->flush(); // borra todas las sesiones
+        // session()->regenerate();
+        // session()->forget(""); // borra una key en especifico
+        // session(['key'=> 'value']); //asigna una llave a la sesion
         $posts = Post::paginate(3);
        
         return view("dashboard/post/index", compact('posts'));
@@ -75,10 +79,11 @@ class PostController extends Controller
      */
     public function store(StoreRequest $request)
     {   
+        
         Post::create($request->validated()); // llama a la validacion del archivo aparte
         
         
-        return to_route('post.index');
+        return to_route('post.index')->with('status', 'Publicacion Creada');
         
         // $validated = Validator::make($request -> all(),
         // [
@@ -150,13 +155,13 @@ class PostController extends Controller
         
         //imagen
         $post ->update($data);  
-        return to_route('post.index');  
+        return to_route('post.index') ->with('status', 'Publicacion Modificada');  
     }
 
    
     public function destroy(Post $post)
     {
         $post->delete();
-        return to_route('post.index');
+        return to_route('post.index')->with('status', 'Publicacion Borrada');
     }
 }
