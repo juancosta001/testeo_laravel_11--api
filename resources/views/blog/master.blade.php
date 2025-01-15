@@ -16,7 +16,6 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
 
             <!-- Page Heading -->
             @isset($header)
@@ -29,25 +28,13 @@
 
             <!-- Page Content -->
             <main>
-            
-
                 <main>
-                    <div class="container mx-auto px-4">
-                        
-                        @if (session('status'))
-                            <div class="bg-green my-3">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-                
-                        <div class="mt-8 bg-white" >
-                            <h1 class="card text-xl">Dashboard</h1>
+                    <div class="container mx-auto px-4">   
                             @yield('content')
-                        </div>
                     </div>
                 </main>
                 
-            
+
             </main>
         </div>
     </body>

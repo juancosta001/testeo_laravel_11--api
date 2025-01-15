@@ -9,13 +9,21 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+
+
 class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
-    {    
+    {
+         //pruebas para ver el sql que te autogenera, para eso se utiliza DB y la funcion toSql, si queres ver lo que esta trayendo usas get
+        //  $category_id=[1,2,3]; // puede establecerle variables a la consulta, y tambien arrays
+        // Post::where('id', '>=',1)->where(function($query)use($category_id){   
+        //     dd($category_id);               
+        // $query->where('category_id',$category_id) -> orWhere('posted','yes');})->toSql();
+
         // session()->flush(); // borra todas las sesiones
         // session()->regenerate();
         // session()->forget(""); // borra una key en especifico

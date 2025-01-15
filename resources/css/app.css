@@ -47,15 +47,3 @@ label{
 .card {
     @apply p-6 rounded shadow-sm
 }
-.card-white{
-    @apply bg-white
-}
-.card-green{
-    @apply bg-green-300
-}
-.card-blue{
-    @apply bg-blue-200
-}
-.card-success{
-    @apply bg-green-800
-}
