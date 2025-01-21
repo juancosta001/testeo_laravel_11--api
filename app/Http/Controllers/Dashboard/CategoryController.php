@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Post\CategoryRequest;
+use App\Http\Requests\Category\CategoryRequest;
 use App\Http\Requests\Post\StoreRequest;
 use App\Models\category;
 use Illuminate\Http\Request;
@@ -26,7 +26,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::pluck('id','title'); //con pluc se le indican los valores
+        $categories = Category::pluck('id',key: 'title'); //con pluc se le indican los valores
         $categorias = new Category(); //sirve para inicializar el objeto, para luego poder usarlo en el form de creacion
     
         return view('dashboard/category/create', compact('categories'));

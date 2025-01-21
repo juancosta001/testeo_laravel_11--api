@@ -1,11 +1,15 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+use Illuminate\Support\Facades\Storage;
+
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Post\StoreRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 
 class PostController extends Controller
 {
@@ -15,7 +19,8 @@ class PostController extends Controller
     }
     public function index()
     {
-        return response()->json(Post::paginate(10));
+        return response()->json(Post::with('category')->paginate(8)); //con esto traemos la relacion con categoria, por eso el width
+        //con estos aparecen los fks y sus datos completos
     }
 
     /**
@@ -23,15 +28,19 @@ class PostController extends Controller
      */
     public function create()
     {
-        
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
+
+
     public function store(StoreRequest $request)
     {
-        return response()->json(Post::create($request->validated()));
+        $data = $request->validated();
+        $post = Post::create($data); // El modelo generará el slug automáticamente
+        return response()->json($post);
     }
 
     /**
@@ -42,7 +51,7 @@ class PostController extends Controller
         return response()->json($post);
     }
 
-    
+
     // public function slug(string $slug)
     public function slug(Post $post)
     {
@@ -61,11 +70,12 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreRequest $request, Post $post)
+        public function update(StoreRequest $request, Post $post)
     {
-        $post ->update($request->validated());
+        $data = $request->validated();
+        $post->update($data); // El modelo se encargará del slug si cambia el título
         return response()->json($post);
-    }
+        }
 
     /**
      * Remove the specified resource from storage.
@@ -74,5 +84,21 @@ class PostController extends Controller
     {
         $post->delete();
         return response()->json('ok');
+    }
+
+    public function upload(Request $request, Post $post){
+
+        $request->validate([
+            'image'=> 'required|mimes:jpg,jpeg,png,gif|max:10240',
+        ]);
+
+        Storage::disk('public_upload')->delete("image/".$post->image);
+        $data['image'] = $filename = time() . '.' . $request ['image']->extension();
+
+        $request->image->move(public_path('image'), $filename);
+
+        $post->update($data);
+
+        return response()->json($post);
     }
 }

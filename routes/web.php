@@ -5,9 +5,19 @@ use App\Http\Middleware\UserAccessDashboardMiddleware;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/vue', function () {
+    return view('Vue');
 });
+Route::get('/vue/save', function () {
+    return view('Vue');
+});Route::get('/vue/{n1?}/{n2?}/{n3?}', function () { //estos son para argumentos, para a la hora de actualizar no te genere problemas
+    return view('Vue');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
