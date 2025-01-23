@@ -1,5 +1,6 @@
 <template>
-
+    <div class="container mx-auto">
+        <div class="mt-6 mb-2 px-6 py-4 bg-white shadow-md rounded-md">
         <!-- <router-link :to="{ name: 'save' }">Crear</router-link> -->
         <o-modal v-model:active="confirmDeleteAction">
             <div class="p-4">
@@ -61,6 +62,8 @@
         :rounded="true"
         :per-page="posts.per_page"
     ></o-pagination>
+</div>
+</div>
 </template>
 
 <script>
@@ -84,16 +87,27 @@ export default {
             }, 100);
         },
         listPage() {
+            const config = {
+                headers:{
+                    Authorization: `Bearer ${this.$root.token}`
+                }
+            }
+
             this.isLoading = true;
-            this.$axios.get(this.$root.urls.postPaginate+ '?page=' + this.currentPage).then((res) => {
+            this.$axios.get(this.$root.urls.postPaginate+ '?page=' + this.currentPage,config).then((res) => {
                 this.posts = res.data;
                 this.isLoading = false;
             });
         },
 
             deletePost() { // Cambia row a post para mayor claridad
+                    const config = {
+                    headers:{
+                        Authorization: `Bearer ${this.$root.token}`
+                    }
+                }
                 this.confirmDeleteAction = false
-                this.$axios.delete(this.$root.urls.postDelete + this.deletePostRow.row.id)
+                this.$axios.delete(this.$root.urls.postDelete + this.deletePostRow.row.id, config)
                 this.posts.data.splice(this.deletePostRow.index,1)
 
                 this.$oruga.notification.open({

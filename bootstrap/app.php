@@ -14,7 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     //aqui se manejan las excepciones, para evitar que en la api muestre demasiados datos
     ->withMiddleware(function (Middleware $middleware) {
-        
+        $middleware->statefulApi(); //aqui es cuando activamos la proteccion de api via SPA, con solo esta linea
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //aqui se agregan todas las excepciones necesarias

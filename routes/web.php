@@ -1,20 +1,36 @@
 <?php
 
 use App\Http\Controllers\blog\BlogController;
+use App\Http\Controllers\LoginController;
 use App\Http\Middleware\UserAccessDashboardMiddleware;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
+Route::get('/', function () {
+    return view('welcome');
+});
+
+
+// Route::group(['prefix'=> 'vue', 'middleware' => ['auth',  UserAccessDashboardMiddleware::class]], function () {
+
+//     Route::get('', function () {
+//         return view('Vue');
+//     })->middleware(['auth'])->name('Vue');
+//     Route::get('/save', function () {
+//         return view('Vue');
+//     });Route::get('/{n1?}/{n2?}/{n3?}', function () { //estos son para argumentos, para a la hora de actualizar no te genere problemas
+//         return view('Vue');
+//     });
 // });
+
 
 Route::get('/vue', function () {
     return view('Vue');
 });
 Route::get('/vue/save', function () {
     return view('Vue');
-});Route::get('/vue/{n1?}/{n2?}/{n3?}', function () { //estos son para argumentos, para a la hora de actualizar no te genere problemas
+});
+Route::get('/vue/{n1?}/{n2?}/{n3?}', function () { //estos son para argumentos, para a la hora de actualizar no te genere problemas
     return view('Vue');
 });
 

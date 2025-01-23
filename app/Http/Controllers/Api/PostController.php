@@ -19,7 +19,7 @@ class PostController extends Controller
     }
     public function index()
     {
-        return response()->json(Post::with('category')->paginate(8)); //con esto traemos la relacion con categoria, por eso el width
+        return response()->json(Post::with('category')->paginate(10)); //con esto traemos la relacion con categoria, por eso el width
         //con estos aparecen los fks y sus datos completos
     }
 

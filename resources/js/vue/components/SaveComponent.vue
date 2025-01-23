@@ -1,4 +1,6 @@
 <template>
+    <div class="container mx-auto">
+        <div class="mt-6 mb-2 px-6 py-4 bg-white shadow-md rounded-md">
     <h1 v-if="post">Modificar Registro  <span class="font-bold">{{ post.title }} </span></h1>
     <h1 v-else="post">Crear Registro </h1>
 
@@ -71,6 +73,8 @@
                 {{ file.name }}
             </span>
   </div>
+</div>
+</div>
 </template>
     <script>
         export default{
@@ -124,13 +128,15 @@
                 },
 
                 upload(){
+
                     this.fileError=''
                     const formData = new FormData()
                     formData.append('image',this.file)
                     this.$axios.post( this.$root.urls.postUpload  + this.post.id, formData,{
 
                         headers:{
-                            'Content-Type' : 'multipart/form-data'
+                            'Content-Type' : 'multipart/form-data',
+                            Authorization: `Bearer ${this.$root.token}`
                         }
 
                         //el uso  del then es cuando todo ya esta bien, como pa finalizar
@@ -170,8 +176,14 @@
                 },
                 send(){
                     this.cleanErrorsForm()
+                    const config = {
+                    headers:{
+                        Authorization: `Bearer ${this.$root.token}`
+                        }
+                    }
                     if(this.post == ''){
-                        this.$axios.post(this.$root.urls.postPost , this.form).then(res => {
+
+                        this.$axios.post(this.$root.urls.postPost , this.form, config).then(res => {
                         console.log(res)
                         this.$oruga.notification.open({
                             message : 'Creado Satisfactoriamente',
@@ -203,7 +215,7 @@
                     })
                     } else{
                         //update
-                        this.$axios.patch(this.$root.urls.postPatch + this.post.id, this.form).then(res => {
+                        this.$axios.patch(this.$root.urls.postPatch + this.post.id, this.form,config).then(res => {
                         console.log(res)
                         this.$oruga.notification.open({
                             message : 'Modificado Satisfactoriamente',
