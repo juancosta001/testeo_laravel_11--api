@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post("user/login", [UserController::class,"login"]);
 Route::post('user/logout', [UserController::class, 'logout']);
-
+Route::get('/qr-code', [UserController::class, 'generateQrCode']);
 
 Route::get('/user', function (Request $request) {
     return $request->user();

@@ -7,6 +7,7 @@ use App\Http\Requests\Post\StoreRequest;
 use App\Models\category;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -20,8 +21,8 @@ class PostController extends Controller
     {
          //pruebas para ver el sql que te autogenera, para eso se utiliza DB y la funcion toSql, si queres ver lo que esta trayendo usas get
         //  $category_id=[1,2,3]; // puede establecerle variables a la consulta, y tambien arrays
-        // Post::where('id', '>=',1)->where(function($query)use($category_id){   
-        //     dd($category_id);               
+        // Post::where('id', '>=',1)->where(function($query)use($category_id){
+        //     dd($category_id);
         // $query->where('category_id',$category_id) -> orWhere('posted','yes');})->toSql();
 
         // session()->flush(); // borra todas las sesiones
@@ -29,7 +30,7 @@ class PostController extends Controller
         // session()->forget(""); // borra una key en especifico
         // session(['key'=> 'value']); //asigna una llave a la sesion
         $posts = Post::paginate(3);
-       
+
         return view("dashboard/post/index", compact('posts'));
 
         // $post = Post::find(1);
@@ -42,13 +43,13 @@ class PostController extends Controller
         //                  "category_id"=> 1,
         //                  "description"=> "test description",
         //                  "posted"=> "not",
-        //                  "image"=> "test image",           
+        //                  "image"=> "test image",
         //         ]
         // );
         // return 'Index';
         // $post ->delete() ;
 
-        
+
         // dd($post); //no es necesario actualizar todo, podes llamar solo a lo que queres actualizar
         // $post -> update(
         //     ["title"=> "test nuevo",
@@ -57,14 +58,14 @@ class PostController extends Controller
         //                  "category_id"=> 1,
         //                  "description"=> "nueva description",
         //                  "posted"=> "not",
-        //                  "image"=> "test image",           
+        //                  "image"=> "test image",
         //         ]
         // );
 
 
 
         // dd($post);
-        
+
         // return response()->json([
         //     "name"=> 'Abigail',
         //     'state' => 'CA',
@@ -78,7 +79,7 @@ class PostController extends Controller
     {
         $categories = Category::pluck('id','title'); //con pluc se le indican los valores
         $post = new Post(); //sirve para inicializar el objeto, para luego poder usarlo en el form de creacion
-    
+
         return view('dashboard/post/create', compact('categories'));
     }
 
@@ -86,13 +87,13 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StoreRequest $request)
-    {   
-        
+    {
+
         Post::create($request->validated()); // llama a la validacion del archivo aparte
-        
-        
+
+
         return to_route('post.index')->with('status', 'Publicacion Creada');
-        
+
         // $validated = Validator::make($request -> all(),
         // [
         //     'title'=> 'required|min:5|max:500',
@@ -103,8 +104,8 @@ class PostController extends Controller
         //     'posted' => 'required',
 
         // ]);
-        // dd($validated); 
-        
+        // dd($validated);
+
         // $request->validate([
         //     'title'=> 'required|min:5|max:500',
         //     'slug'=> 'required|min:5|max:500',
@@ -114,7 +115,7 @@ class PostController extends Controller
         //     'posted' => 'required',
 
         // ]);
-        
+
         // echo 'not';
 
 
@@ -125,7 +126,7 @@ class PostController extends Controller
         //                      "category_id"=> $request->all()['category_id'],
         //                      "description"=> $request->all()['description'],
         //                      "posted"=> $request->all()['posted'],
-        //                     // "image"=> $request->all()['image'],           
+        //                     // "image"=> $request->all()['image'],
         //             ]
         //     );
         // dd($request->all()['title']);
@@ -153,20 +154,21 @@ class PostController extends Controller
      */
     public function update(StoreRequest $request, Post $post) //actualiza
     {
-        $data = $request -> validated();  
+        $data = $request -> validated();
 
         //imagen
         if(isset($data['image'])){
             $data['image'] = $filename = time().'.'.$data['image']->extension(); // es una doble asignacion, es como decir que data y filename tienen los mismos valores
             $request->image->move(public_path('uploads/post'),$filename);
         }
-        
+
+        Cache::forget("post_show_".$post->id);
         //imagen
-        $post ->update($data);  
-        return to_route('post.index') ->with('status', 'Publicacion Modificada');  
+        $post ->update($data);
+        return to_route('post.index') ->with('status', 'Publicacion Modificada');
     }
 
-   
+
     public function destroy(Post $post)
     {
         $post->delete();

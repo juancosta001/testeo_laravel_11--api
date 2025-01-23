@@ -4,7 +4,7 @@
     @if (isset($head))
     <h1>{{$head}}</h1>
     @endif
-    
+
     @foreach ($posts as $p)
         <div class="bg-white mt-2">
             <h3>{{$p ->title}}</h3>
@@ -15,7 +15,9 @@
         </div>
     @endforeach
 
-    {{$footer}}
-    <br>
     {{$posts ->links()}}
+    <br>
+    {{$footer}}
+
+
 </div>

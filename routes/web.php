@@ -6,10 +6,13 @@ use App\Http\Middleware\UserAccessDashboardMiddleware;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+//usar cache en las rutas
 Route::get('/', function () {
-    return view('welcome');
+    return ['Laravel' => app()->version()];
 });
-
 
 // Route::group(['prefix'=> 'vue', 'middleware' => ['auth',  UserAccessDashboardMiddleware::class]], function () {
 
@@ -54,4 +57,5 @@ Route::group(['prefix'=> 'blog'], function () {
     Route::get('',[BlogController::class,'index'])->name('blog.index');
     Route::get('detail/{post}',[BlogController::class,'show'])->name('blog.show');
 });
+
 require __DIR__.'/auth.php';

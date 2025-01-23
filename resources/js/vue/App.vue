@@ -1,16 +1,15 @@
 <template lang="">
     <div>
-
         <nav class='bg-white border-b border-gray'>
             <header class='max-w-auto px-4 sm:px-6 lg:px-8'>
                 <div class='flex justify-between'>
                     <div class='flex items-center'>
-                        <!-- aqui importamos el logo -->
+                        <!-- Aquí importamos el logo -->
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink"
-                            width="40"
-                            height="35"
+                            width="60"
+                            height="45"
                             viewBox="0 0 262 227"
                             >
                             <g id="Vue.js_logo_strokes" fill="none" fill-rule="evenodd">
@@ -33,52 +32,64 @@
                             </g>
                             </svg>
                     </div>
-                    <!-- colocamos los enlaces -->
-                    <div class='max-w-7xl mx-auto py-4 px-4 sm:px-6'>
+
+                    <!-- Contenedor de enlaces y botones -->
+                    <div class='max-w-7xl mx-auto py-4 px-4 sm:px-6 flex items-center'>
+                        <!-- Enlace de Login -->
                         <router-link :to="{'name': 'login'}" class='inline-flex uppercase border-b-2 text-sm-leading-5 mx-3 px-4 py-1 text-gray-600 text-center font-bold hover:text-gray-900 hover:border-gray-700 hover:-translate-y-1 durarion-150 transition-all' v-if="!$root.isLoggedIn">
                             Login
                         </router-link>
 
+                        <!-- Enlace de List -->
                         <router-link :to="{'name': 'list'}" class='inline-flex uppercase border-b-2 text-sm-leading-5 mx-3 px-4 py-1 text-gray-600 text-center font-bold hover:text-gray-900 hover:border-gray-700 hover:-translate-y-1 durarion-150 transition-all' v-if="$root.isLoggedIn">
                             List
                         </router-link>
-                         <!-- boton de cerrar sesion -->
+
+                        <!-- Botón de Cerrar Sesión -->
                         <o-button
                             v-if="$root.isLoggedIn"
                             variant="danger"
                             @click="logout"
+                            class="mx-3"
                         >
                             Cerrar Sesion
                         </o-button>
+
+                        <qrcode-vue
+                            v-if="$root.isLoggedIn"
+                            :value="qrValue"
+                            :size="75"
+                            class="mx-3"
+                        ></qrcode-vue>
                     </div>
-                     <!-- llamar al nombre de  los usuarios -->
-                    <div class='flex flex-col items-center py-2' v-if='$root.isLoggedIn'>
-                        <div class='rounded-full w-9 h-9 bg-blue-300 text-center p-1 font-bold'>  <!-- con este apartado creamos el avatar-->
-                            {{ $root.user.name.substr(0,2).toUpperCase() }}    <!-- se utiliza la funcion substr para traer las primeras 2 letras del nombre -->
+
+                    <!-- Avatar y nombre del usuario -->
+                    <div class='flex flex-col items-center py-9' v-if='$root.isLoggedIn'>
+                        <div class='rounded-full w-9 h-9 bg-blue-300 text-center p-1 font-bold'>  <!-- Avatar -->
+                            {{ $root.user.name.substr(0,2).toUpperCase() }}    <!-- Iniciales del nombre -->
                         </div>
                         <p>{{ $root.user.name }}</p>
                     </div>
                 </div>
             </header>
-
         </nav>
-
-        <!-- <o-button variant='danger' @click='logout'>
-            Close Sesion
-        </o-button> -->
 
         <router-view></router-view>
     </div>
 </template>
 
 <script>
+import QrcodeVue from 'qrcode.vue';
     export default{
+        components:{
+            QrcodeVue,
+        },
         mounted(){
             if(window.Laravel && window.Laravel.isLoggedIn){
                 this.isLoggedIn = true
                 this.user = window.Laravel.user
                 this.token = window.Laravel.token
-
+                this.fetchQrCode();
               this.$root.setCookieAuth({
                     isLoggedIn: this.isLoggedIn,
                     token: this.token,
@@ -111,6 +122,15 @@
             setCookieAuth(data){
             this.$cookies.set('auth',data)
         },
+        async fetchQrCode() {
+        try {
+            const response = await this.$axios.get('/api/qr-code'); // Hacer la solicitud HTTP
+            this.qrCode = response.data.qrCode; // Asignar el código QR a la variable
+        } catch (error) {
+            console.error('Error al obtener el código QR:', error);
+        }
+    },
+
             logout() {
             const config = {
                 headers: {
@@ -138,6 +158,7 @@
                 isLoggedIn: false,
                 user:'',
                 token:'',
+                qrValue: 'https://github.com/juancosta001',
             urls: {
                 postUpload:'/api/post/upload/',
                 postPatch:'/api/post/',

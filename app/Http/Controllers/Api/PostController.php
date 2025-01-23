@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Post\StoreRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 
@@ -15,7 +16,18 @@ class PostController extends Controller
 {
     public function all()
     {
-        return response()->json(Post::get());
+        //para solicitar la cache en json
+        // if(cache() -> has("post_index")){
+        //     return response()->json(cache()->get("post_index"));
+        // } else{
+        //      $posts = Post::get();
+        //      cache()->put("post_index", $posts,0);
+        //      return response()->json($posts);
+        // }
+
+        return response()->json(Cache::remember('post_index',now()->addMinutes(10), function () {
+            return Post::all();
+        }));
     }
     public function index()
     {

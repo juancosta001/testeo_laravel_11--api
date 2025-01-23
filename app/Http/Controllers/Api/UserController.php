@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as Auth;
 use App\Models\User;
-
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 //controlador utilizado para hacer las pruebas via token
 class UserController extends Controller
@@ -48,6 +48,16 @@ class UserController extends Controller
 
             session()->flush(); // Limpia la sesión
             return response()->json(['message' => 'Sesión cerrada exitosamente'], 200);
+        }
+        public function generateQrCode()
+        {
+            // Generar un código QR en formato SVG
+            $qrCode = QrCode::size(200)->generate('https://github.com/juancosta001');
+
+            // Devolver el código QR como una respuesta JSON
+            return response()->json([
+                'qrCode' => $qrCode,
+            ]);
         }
 
 }
